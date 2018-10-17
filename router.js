@@ -21,6 +21,17 @@ var bodyParser = require('body-parser');
 //7，创建 application/x-www-form-urlencoded 编码解析
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
+var session = require('express-session');
+app.use(session({
+    secret: '12345',
+    name: 'express_11_cookie',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
+    cookie: {maxAge: 80*1000 },     //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
+}));
+
+
 var accountController = require('./controllers/AccountController');
 app.get('/index', accountController.index);
 app.get('/signin', accountController.signin);
