@@ -97,5 +97,27 @@ function UserDao() {
       //  this.connection.end();
     }
 
+
+    this.selectProducts1= function (call) {
+        //1,编写sql语句
+        var userGetSql = 'SELECT * FROM products1 where id in(9,10,11,12)';
+        //2,进行查询操作
+        /**
+         *query，mysql语句执行的方法
+         * 1，userAddSql编写的sql语句
+         * 2，function (err, result)，回调函数，err当执行错误时，回传一个err值，当执行成功时，传回result
+         */
+        this.connection.query(userGetSql, function (err, result) {
+            if (err) {
+                console.log('[INSERT ERROR] - ', err.message);
+                return;
+            }
+
+            call(result);
+        });
+        //3,连接结束
+        //  this.connection.end();
+    }
+
 }
 module.exports = UserDao;

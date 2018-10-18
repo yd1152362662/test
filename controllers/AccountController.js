@@ -55,6 +55,7 @@ exports.index=function(req, res){
     var  password=req.cookies.password;
 
     if(name==null||password==null){
+
         res.render('index',{state:-1});
     }else{
         //(1)引入userService
@@ -247,49 +248,64 @@ exports.register=function(req, res){
     //res.render('register',{})
 }
 exports.products=function(req, res){
-    //if(req.session.sign){
-    //    res.render('register',{state:2});
-    //    return;
-    //}
-    //
-    //var  name =req.cookies.name;
-    //var  password=req.cookies.password;
-    //
-    //if(name==null||password==null){
-    //    res.render('register',{state:-1});
-    //}else{
-    //    //(1)引入userService
-    //    var UserService = require('../Service/UserService');
-    //    //(2)创建对象
-    //    var userService = new UserService();
-    //    //(3)对象初始化
-    //    userService.init();
-    //    //(4)验证用户都合法
-    //    userService.checkUser(name,password,function(result){
-    //        if(result.state==2)
-    //        {
-    //            req.session.sign=true;
-    //            res.render('register',{state:2});
-    //        }else{
-    //            res.render('register',{state:-1});
-    //        }
-    //    },1);
-    //}
-    //
-    //
-    //
-
-
-
     var UserService = require('../Service/UserService');
     //(2)创建对象
     var userService = new UserService();
     //(3)对象初始化
     userService.init();
-    userService.selectProducts(function(result){
-        console.log(result)
-        res.render('products',{products:result,state:-1})
-    });
+    //(4)验证用户都合法
+    if(req.session.sign){
+        userService.selectProducts(function(result){
+            console.log(result)
+            res.render('products',{products:result,state:2});
+        });
+        //res.render('products',{state:2});
+        return;
+    }
+
+    var  name =req.cookies.name;
+    var  password=req.cookies.password;
+
+    if(name==null||password==null){
+        userService.selectProducts(function(result){
+            console.log(result)
+            res.render('products',{products:result,state:-1});
+        });
+    }else{
+        //(4)验证用户都合法
+        userService.checkUser(name,password,function(result){
+            var obj={
+                state :0
+            }
+            if(result.state==2)
+            {
+                req.session.sign=true;
+                obj.state=2;
+            }else{
+                obj.state=-1;
+            }
+            userService.selectProducts(function(result){
+                console.log(result)
+                obj.products = result;
+                res.render('products',obj);
+            });
+        },1);
+    }
+
+
+
+
+
+    //
+    //var UserService = require('../Service/UserService');
+    ////(2)创建对象
+    //var userService = new UserService();
+    ////(3)对象初始化
+    //userService.init();
+    //userService.selectProducts(function(result){
+    //    console.log(result)
+    //    res.render('products',{products:result,state:-1})
+    //});
 
 
 

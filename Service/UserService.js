@@ -120,6 +120,15 @@ function UserService(){
         })
     }
 
+    this.selectProducts1=function(call){
+
+
+        //(1)查询用户数据
+        this.userDao.selectProducts(function(result){
+
+            call(result);
+        })
+    }
 
     this.crypto=function(source){
         //1,引入加密模块
