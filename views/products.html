@@ -74,7 +74,7 @@
 							<ul>
 								<li><a href="single">快速查看 </a></li>
 								<li><input type="number" class="item_quantity" min="1" value="1"></li>
-								<li><a class="item_add" href=""> 加入购物车</a></li>
+								<li><a class="item_add" onclick="addCarList(<%= a.products_id%>)"> 加入购物车</a></li>
 							</ul>
 						</div>
 					</div>
@@ -94,6 +94,27 @@
 					</div>
 				</div>
 				<%})%>
+
+				<script>
+					function addCarList(goodId) {
+						$.ajax({
+							url: 'addCarList',
+							type: 'post',
+							data: {
+								productId: goodId
+							},
+							traditional: true,//这里设置为true
+							success: function (data) {
+								console.log(data);
+								alert(data);
+							}
+						})
+					}
+				</script>
+
+
+
+
 
 			</div>
 

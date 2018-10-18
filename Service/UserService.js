@@ -13,9 +13,6 @@ function UserService(){
         this.userDao.init();
     }
 
-
-
-
     this.insert=function(user,password,FirstName,LastName,call){
 
         var resData={
@@ -48,9 +45,6 @@ function UserService(){
         })
     }
 
-
-
-
     this.selectUserByName=function(name,call){
         //(1)查询用户数据
         this.userDao.selectUserByName(name,function(result){
@@ -76,9 +70,12 @@ function UserService(){
 
 
         this.selectUserByName(user,function(result){
+            var that = this;
+
             var body={
                 state:0,
                 msg:"hello"
+
             }
 
             //1,获得数组的长度
@@ -95,6 +92,8 @@ function UserService(){
                         body.msg="登录成功！";
                     body.user=user;
                     body.password=buffer;
+
+
                 }else{
                     body.state=1,
                         body.msg="登录失败，密码错误，请重新输入密码！";
@@ -120,15 +119,20 @@ function UserService(){
         })
     }
 
-    this.selectProducts1=function(call){
+    this.selectPro=function(call){
 
 
         //(1)查询用户数据
-        this.userDao.selectProducts(function(result){
+        this.userDao.selectPro(function(result){
 
             call(result);
         })
     }
+
+    //this.setSession = function (session, user_id) {
+    //    session.sign = true;
+    //    session.userId = user_id;
+    //};
 
     this.crypto=function(source){
         //1,引入加密模块
@@ -139,13 +143,6 @@ function UserService(){
         var en_data = md5.update(source).digest('hex');
         return en_data;
     }
-
-
-
-
-
-
-
 
 }
 

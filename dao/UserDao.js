@@ -61,7 +61,7 @@ function UserDao() {
 
     this.update=function(user,password,id,call){
         //1,编写sql语句
-        var userModSql = "UPDATE user SET user = ?,password = ? WHERE id = ?";
+        var userModSql = "UPDATE user SET user = ?,password = ? WHERE products_id = ?";
         var userModSql_Params = [user,password,id];
 
         //2，更新操作
@@ -98,9 +98,9 @@ function UserDao() {
     }
 
 
-    this.selectProducts1= function (call) {
+    this.selectPro= function (call) {
         //1,编写sql语句
-        var userGetSql = 'SELECT * FROM products1 where id in(9,10,11,12)';
+        var userGetSql = 'SELECT * FROM products1 WHERE products_id in(9,10,11,12)';
         //2,进行查询操作
         /**
          *query，mysql语句执行的方法
@@ -112,12 +112,14 @@ function UserDao() {
                 console.log('[INSERT ERROR] - ', err.message);
                 return;
             }
-
+            console.log(result)
             call(result);
         });
         //3,连接结束
         //  this.connection.end();
     }
+
+
 
 }
 module.exports = UserDao;

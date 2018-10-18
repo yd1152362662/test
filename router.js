@@ -46,5 +46,6 @@ app.get('/products', accountController.products);
 
 app.post('/login1',urlencodedParser, accountController.login1);
 app.post('/register1',urlencodedParser, accountController.register1);
-
+app.post('/addCarList',urlencodedParser,accountController.addCarList);
+app.post('/removeCarList',urlencodedParser,accountController.removeCarList);
 app.listen(8888);

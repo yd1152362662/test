@@ -46,8 +46,18 @@ exports.index=function(req, res){
 
 
 
+
+    var UserService = require('../Service/UserService');
+    //(2)创建对象
+    var userService = new UserService();
+    //(3)对象初始化
+    userService.init();
+    //(4)验证用户都合法
     if(req.session.sign){
-        res.render('index',{state:2});
+        userService.selectProducts(function(result){
+            console.log(result)
+            res.render('index',{products:result,state:2});
+        });
         return;
     }
 
@@ -55,27 +65,30 @@ exports.index=function(req, res){
     var  password=req.cookies.password;
 
     if(name==null||password==null){
-
-        res.render('index',{state:-1});
+        userService.selectPro(function(result){
+            console.log(result)
+            res.render('index',{products:result,state:-1});
+        });
     }else{
-        //(1)引入userService
-        var UserService = require('../Service/UserService');
-        //(2)创建对象
-        var userService = new UserService();
-        //(3)对象初始化
-        userService.init();
         //(4)验证用户都合法
         userService.checkUser(name,password,function(result){
+            var obj={
+                state :0
+            }
             if(result.state==2)
             {
                 req.session.sign=true;
-                res.render('index',{state:2});
+                obj.state=2;
             }else{
-                res.render('index',{state:-1});
+                obj.state=-1;
             }
+            userService.selectPro(function(result){
+                console.log(result)
+                obj.products = result;
+                res.render('index',obj);
+            });
         },1);
     }
-
 
 
 
@@ -259,7 +272,6 @@ exports.products=function(req, res){
             console.log(result)
             res.render('products',{products:result,state:2});
         });
-        //res.render('products',{state:2});
         return;
     }
 
@@ -292,24 +304,6 @@ exports.products=function(req, res){
         },1);
     }
 
-
-
-
-
-    //
-    //var UserService = require('../Service/UserService');
-    ////(2)创建对象
-    //var userService = new UserService();
-    ////(3)对象初始化
-    //userService.init();
-    //userService.selectProducts(function(result){
-    //    console.log(result)
-    //    res.render('products',{products:result,state:-1})
-    //});
-
-
-
-   // res.render('products',{})
 }
 exports.faq=function(req, res){
 
@@ -410,6 +404,22 @@ exports.single=function(req, res){
 
 
     //res.render('single',{})
+}
+exports.addCarList=function(req,res){
+    //1, 解析数据
+    var productId = req.body.productId;
+    //1,引入购物车处理模块
+    var CarlistService = require('../Service/CarlistService');
+    var carlistService = new CarlistService();
+
+    carlistService.init();
+    carlistService.addCarlist(req.session,productId,function(data){
+        carlistService.end();
+        res.end(data);
+    });
+}
+exports.removeCarList=function(){
+
 }
 
 
