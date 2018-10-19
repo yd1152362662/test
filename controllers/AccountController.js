@@ -12,7 +12,7 @@ exports.login1 = function(req, res){
     //(3)对象初始化
     userService.init();
     //(4)验证用户是否合法
-    userService.checkUser(user,password,function(result){
+    userService.checkUser(req.session,user,password,function(result){
         if(result.state==2){
             req.session.sign=true;
             res.cookie('name',result.name, {maxAge:60*60 * 1000});
@@ -71,7 +71,7 @@ exports.index=function(req, res){
         });
     }else{
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
             var obj={
                 state :0
             }
@@ -113,7 +113,7 @@ exports.checkout=function(req, res){
         //(3)对象初始化
         userService.init();
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
             if(result.state==2)
             {
                 req.session.sign=true;
@@ -149,7 +149,7 @@ exports.about=function(req, res){
         //(3)对象初始化
         userService.init();
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
             if(result.state==2)
             {
                 req.session.sign=true;
@@ -182,7 +182,7 @@ exports.codes=function(req, res){
         //(3)对象初始化
         userService.init();
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
             if(result.state==2)
             {
                 req.session.sign=true;
@@ -215,7 +215,7 @@ exports.contact=function(req, res){
         //(3)对象初始化
         userService.init();
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
             if(result.state==2)
             {
                 req.session.sign=true;
@@ -247,7 +247,7 @@ exports.register=function(req, res){
         //(3)对象初始化
         userService.init();
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
             if(result.state==2)
             {
                 req.session.sign=true;
@@ -285,7 +285,7 @@ exports.products=function(req, res){
         });
     }else{
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
             var obj={
                 state :0
             }
@@ -325,7 +325,7 @@ exports.faq=function(req, res){
         //(3)对象初始化
         userService.init();
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
             if(result.state==2)
             {
                 req.session.sign=true;
@@ -358,7 +358,8 @@ exports.signin=function(req, res){
         //(3)对象初始化
         userService.init();
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session,name,password,function(result){
+
             if(result.state==2)
             {
                 req.session.sign=true;
@@ -391,7 +392,7 @@ exports.single=function(req, res){
         //(3)对象初始化
         userService.init();
         //(4)验证用户都合法
-        userService.checkUser(name,password,function(result){
+        userService.checkUser(req.session.user_id,name,password,function(result){
             if(result.state==2)
             {
                 req.session.sign=true;
@@ -414,6 +415,7 @@ exports.addCarList=function(req,res){
 
     carlistService.init();
     carlistService.addCarlist(req.session,productId,function(data){
+        console.log(req.session)
         carlistService.end();
         res.end(data);
     });

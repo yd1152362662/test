@@ -15,7 +15,7 @@ function UserDao() {
     }
     this.selectUserByName = function (name,call) {
         //1,编写sql语句
-        var userGetSql = "SELECT password FROM user where user ='"+name+"'";
+        var userGetSql = "SELECT * FROM user where user ='"+name+"'";
         //2,进行查询操作
         /**
          *query，mysql语句执行的方法

@@ -38,6 +38,7 @@ function UserService(){
                 that.userDao.insert(user,password,FirstName,LastName,function (data) {
                     resData.msg="注册成功";
                     resData.insertId=data.insertId;
+
                     call(resData);
                 })
             }
@@ -59,7 +60,7 @@ function UserService(){
         })
     }
 
-    this.checkUser=function(user,password,call,state){
+    this.checkUser=function(session,user,password,call,state){
 
         if(state==0){
             //(1)用户工具类
@@ -78,6 +79,7 @@ function UserService(){
 
             }
 
+
             //1,获得数组的长度
             var length = result.length;
 
@@ -89,10 +91,12 @@ function UserService(){
                 //3,判断用户是否合法
                 if(password==buffer){
                     body.state=2,
-                        body.msg="登录成功！";
+                    body.msg="登录成功！";
                     body.user=user;
                     body.password=buffer;
-
+                    session.user={
+                        userid:result[0].user_id
+                    }
 
                 }else{
                     body.state=1,

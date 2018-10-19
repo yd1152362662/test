@@ -15,10 +15,10 @@ module.exports=function CarlistService(){
         var that = this;
         if (session.sign) {
 
-            this.checkList(session.user_id, productId, function (result) {
+            this.checkList(session.user.userid, productId, function (result) {
                 if (result) {
                     that.carListDao.init();
-                        that.carListDao.addCarList([session.user_id, productId], function (result) {
+                        that.carListDao.addCarList([session.user.userid, productId], function (result) {
                         msg = '商品添加成功，请在购物车中查看！！！';
                         call(msg);
                     })
